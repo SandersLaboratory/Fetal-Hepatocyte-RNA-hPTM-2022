@@ -1,0 +1,17 @@
+sample,adultfetal,group,lappos,oc2pos,replicate
+A1,Adult,Adult,FALSE,FALSE,1
+A2,Adult,Adult,FALSE,FALSE,2
+A3,Adult,Adult,FALSE,FALSE,3
+A4,Adult,Adult,FALSE,FALSE,4
+D1,Fetal,Dual,TRUE,TRUE,1
+D2,Fetal,Dual,TRUE,TRUE,2
+D3,Fetal,Dual,TRUE,TRUE,3
+D4,Fetal,Dual,TRUE,TRUE,4
+L1,Fetal,LAP,TRUE,FALSE,1
+L2,Fetal,LAP,TRUE,FALSE,2
+L3,Fetal,LAP,TRUE,FALSE,3
+L4,Fetal,LAP,TRUE,FALSE,4
+S1,Fetal,Single,TRUE,FALSE,1
+S3,Fetal,Single,TRUE,FALSE,2
+S4,Fetal,Single,TRUE,FALSE,3
+S5,Fetal,Single,TRUE,FALSE,4
