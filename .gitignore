@@ -1,0 +1,13 @@
+# .gitignore file
+# The following files will not be synchronized by GitHub
+
+# macOS Files
+.DS_Store
+
+# R History
+.Rhistory
+.RData
+
+# Windows Files
+thumbs.db
+desktop.ini
