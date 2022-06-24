@@ -14,8 +14,8 @@
 subfolder <- "AF_Genewiz"
 
 # What analysis to run?
-# 'Dual', 'Single', or 'LCM'
-comparison <- "LCM"
+# 'Dual', 'Single', 'LAP', or 'LCM'
+comparison <- "Dual"
 
 if(comparison == "LCM"){
   inputCountdata <- "AF_LCM_all_counts_no246.csv"
@@ -26,19 +26,20 @@ if(comparison == "LCM"){
   yLimits = c(0,6)
 }
 
-if(comparison == "Dual" || comparison == "Single"){
+if(comparison == "Dual" || comparison == "Single" || comparison == "LAP"){
   inputCountdata <- "AF_Cells_raw_counts.csv"
   inputMetadata <- "AF_Cells_metadata.csv"
   comparisonGroup <- "group"
   if(comparison == "Dual"){inputContrast <- "Dual-Adult"}
   if(comparison == "Single"){inputContrast <- "Single-Adult"}
+  if(comparison == "LAP"){inputContrast <- "LAP-Adult"}
   xLimits <- c(-11,11)
   yLimits = c(0,150)
 }
 
 # Volcano style: Simple, Enhanced, or Minimal?
 # Minimal is designed for figures, and has axes +/- 15 with no labels
-style = "Minimal"
+style = "Enhanced"
 
 # What FDR cutoff? (Default is 0.05)
 userFDR = 0.05

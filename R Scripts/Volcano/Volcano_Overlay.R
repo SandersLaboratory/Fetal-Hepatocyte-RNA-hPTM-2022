@@ -278,7 +278,8 @@ plot
 nameOfOutputFile <- paste(inputContrast,"_",listType,sep="")
 
 # Save output of plot
-setwd(paste(userwd,"/Volcanoes",sep=""))
+#setwd(paste(userwd,"/Volcanoes",sep=""))
+setwd(paste(userwd))
 #ggsave(paste(nameOfOutputFile,".pdf",sep=""),width = 8, height = 8)
 ggsave(paste(nameOfOutputFile,".png",sep=""),width = 10, height = 10)
 
@@ -290,7 +291,22 @@ calloutList <- as.data.frame(calloutList,symbolList)
 colnames(calloutList) <- nameOfPathway
 write.csv(calloutList, paste(nameOfOutputFile,"_filtered_genes.csv",sep=""))
 
-blueDown <- sum(deanalysis$logFC<0 & deanalysis$COLOR=='royalblue')
-blueUp <- sum(deanalysis$logFC>0 & deanalysis$COLOR=='royalblue')
-redDown <- sum(deanalysis$logFC<0 & deanalysis$COLOR=='red')
-redUp <- sum(deanalysis$logFC>0 & deanalysis$COLOR=='red')
+#join deanalysis(logFC and FDR) by ENSEMBL
+df = merge(x=calloutList,y=deanalysis[ , c("SYMBOL","ENSEMBL","logFC","FDR")],by="ENSEMBL",all.x=TRUE)
+names(df)[names(df) == "logFC"] <- paste(inputContrast,"logFC",sep="_")
+names(df)[names(df) == "FDR"] <- paste(inputContrast,"FDR",sep="_")
+#join inputListUP (logFC and FDR) by ENSEMBL
+df = merge(x=df,y=pathwayListUP[ , c("ENSEMBL","logFC","FDR")],by="ENSEMBL",all.x=TRUE)
+names(df)[names(df) == "logFC"] <- paste("Colony_Host","logFC",sep="_")
+names(df)[names(df) == "FDR"] <- paste("Colony_Host","FDR",sep="_")
+#join inputlistDOWN (logFC and FDR) by ENSEMBL
+df = merge(x=df,y=pathwayListDOWN[ , c("ENSEMBL","logFC","FDR")],by="ENSEMBL",all.x=TRUE)
+names(df)[names(df) == "logFC"] <- paste("Colony_Host","logFC",sep="_")
+names(df)[names(df) == "FDR"] <- paste("Colony_Host","FDR",sep="_")
+
+write.csv(df, paste(nameOfOutputFile,"_overlap_gene_expression.csv",sep=""))
+
+# blueDown <- sum(deanalysis$logFC<0 & deanalysis$COLOR=='royalblue')
+# blueUp <- sum(deanalysis$logFC>0 & deanalysis$COLOR=='royalblue')
+# redDown <- sum(deanalysis$logFC<0 & deanalysis$COLOR=='red')
+# redUp <- sum(deanalysis$logFC>0 & deanalysis$COLOR=='red')
