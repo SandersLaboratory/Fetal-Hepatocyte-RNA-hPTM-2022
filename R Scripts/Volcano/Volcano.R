@@ -262,6 +262,7 @@ write.csv(deanalysis2,file=paste("DEAnalysis_",comparisonGroup,"_",inputContrast
 sigUp <- apply(sigUp,2,as.character)
 sigDown <- apply(sigDown,2,as.character)
 
+write.csv(cpmsc,file=paste("Background_Trimmed_","DEAnalysis_",comparisonGroup,"_",inputContrast,".csv",sep=""))
 write.csv(sigUp,file=paste("SigUp_","DEAnalysis_",comparisonGroup,"_",inputContrast,".csv",sep=""))
 write.csv(sigDown,file=paste("SigDown_","DEAnalysis_",comparisonGroup,"_",inputContrast,".csv",sep=""))
 
