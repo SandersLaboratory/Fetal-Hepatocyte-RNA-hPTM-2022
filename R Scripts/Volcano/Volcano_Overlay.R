@@ -68,7 +68,7 @@ userFDR = 0.05
   genome <- 'org.Rn.eg.db'
 
   # Use RedBlue or Custom coloring?
-  colorStyle="RedGreen"
+  colorStyle="RedBlue"
   
   # Axis Limits
   xLimits <- c(-11,11)
