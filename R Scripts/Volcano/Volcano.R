@@ -51,7 +51,7 @@ userFDR = 0.05
   genome <- 'org.Rn.eg'
 
   # For Minimal only, use Red for both +/-, or RedBlue?
-  colorStyle="RedGreen"
+  colorStyle="RedBlue"
   
   # Axis Limits
   #xLimits <- c(-20,20)
