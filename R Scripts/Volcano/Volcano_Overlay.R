@@ -68,7 +68,7 @@ userFDR = 0.05
   genome <- 'org.Rn.eg.db'
 
   # Use RedBlue or Custom coloring?
-  colorStyle="RedBlue"
+  colorStyle="RedGreen"
   
   # Axis Limits
   xLimits <- c(-11,11)
@@ -164,19 +164,19 @@ deanalysis$SYMBOL[is.na(deanalysis$SYMBOL)] <- " "
 # Keep only q-values of <=0.05
 sigde=deanalysis[deanalysis[,"FDR"]<=.05,]
 
-# If looking for top #
-if (calloutList == "TOP") {
-  sigdeCOPY <- sigde
-  #sigdeCOPY <- sigdeCOPY %>% arrange(desc(sigdeCOPY$logFC)) # For logFC
-  symbolList <- sigdeCOPY$SYMBOL[1:topNum]
-  ensemblList <- sigdeCOPY$ENSEMBL[1:topNum]
-  symbolList <- symbolList[!symbolList %in% removeThese]
-  ensemblList <- ensemblList[!ensemblList %in% removeThese]
-  
-  pathwayList <- ensemblList
-  #pathwayList <- pathwayList[!pathwayList %in% removeThese]
-  calloutList <- pathwayList
-}
+# # If looking for top #
+# if (calloutList == "TOP") {
+#   sigdeCOPY <- sigde
+#   #sigdeCOPY <- sigdeCOPY %>% arrange(desc(sigdeCOPY$logFC)) # For logFC
+#   symbolList <- sigdeCOPY$SYMBOL[1:topNum]
+#   ensemblList <- sigdeCOPY$ENSEMBL[1:topNum]
+#   symbolList <- symbolList[!symbolList %in% removeThese]
+#   ensemblList <- ensemblList[!ensemblList %in% removeThese]
+#   
+#   pathwayList <- ensemblList
+#   #pathwayList <- pathwayList[!pathwayList %in% removeThese]
+#   calloutList <- pathwayList
+# }
 
 # Remove from name list if FDR >0.05
 if (nameOfPathway=="ENSEMBL") {
@@ -229,6 +229,32 @@ if (style=="Overlay"){
     names(keyvals.colour2)[keyvals.colour2 == 'red'] <- 'up'
     names(keyvals.colour2)[keyvals.colour2 == 'black'] <- 'ns'
     names(keyvals.colour2)[keyvals.colour2 == 'royalblue'] <- 'down'
+  }
+  
+  if (colorStyle=="RedGreen"){
+    
+    #Copy in Colony logFC into table
+    pathwayListMERGE_ClogFC <- pathwayListMERGE[,c("ENSEMBL","logFC")]
+    colnames(pathwayListMERGE_ClogFC) <- c("ENSEMBL","ClogFC")
+    deanalysis <- left_join(deanalysis, pathwayListMERGE_ClogFC, by="ENSEMBL")
+    
+    deanalysis$COLOR <- ifelse(
+      deanalysis$FDR > userFDR, 'black',
+      #ifelse(deanalysis$logFC < 0 & deanalysis$SYMBOL %in% calloutList, 'royalblue',
+      #ifelse(deanalysis$logFC > 0 & deanalysis$SYMBOL %in% calloutList, 'red',
+      ifelse(deanalysis$ClogFC < 0 & deanalysis$ENSEMBL %in% calloutList, 'green4',
+             ifelse(deanalysis$ClogFC > 0 & deanalysis$ENSEMBL %in% calloutList, 'red',      
+                    'gray')))
+    deanalysis$COLOR[is.na(deanalysis$COLOR)] <- 'gray'
+    
+    #Ugh. Now reorder by that so the colored dots go on top...
+    
+    deanalysis <- deanalysis %>% arrange(deanalysis$COLOR)
+    keyvals.colour2 <- deanalysis$COLOR
+    names(keyvals.colour2)[keyvals.colour2 == 'gray'] <- 'null'
+    names(keyvals.colour2)[keyvals.colour2 == 'red'] <- 'up'
+    names(keyvals.colour2)[keyvals.colour2 == 'black'] <- 'ns'
+    names(keyvals.colour2)[keyvals.colour2 == 'green4'] <- 'down'
   }
   
   sigs <- deanalysis[deanalysis$FDR < 0.05,]

@@ -15,7 +15,7 @@ subfolder <- "AF_Genewiz"
 
 # What analysis to run?
 # 'Dual', 'Single', 'LAP', or 'LCM'
-comparison <- "Dual"
+comparison <- "LCM"
 
 if(comparison == "LCM"){
   inputCountdata <- "AF_LCM_all_counts_no246.csv"
@@ -39,7 +39,7 @@ if(comparison == "Dual" || comparison == "Single" || comparison == "LAP"){
 
 # Volcano style: Simple, Enhanced, or Minimal?
 # Minimal is designed for figures, and has axes +/- 15 with no labels
-style = "Enhanced"
+style = "Minimal"
 
 # What FDR cutoff? (Default is 0.05)
 userFDR = 0.05
@@ -51,7 +51,7 @@ userFDR = 0.05
   genome <- 'org.Rn.eg'
 
   # For Minimal only, use Red for both +/-, or RedBlue?
-  colorStyle="RedBlue"
+  colorStyle="RedGreen"
   
   # Axis Limits
   #xLimits <- c(-20,20)
@@ -206,6 +206,18 @@ if (style=="Minimal"){
     names(keyvals.colour)[keyvals.colour == 'black'] <- 'ns'
     names(keyvals.colour)[keyvals.colour == 'royalblue'] <- 'down'
   }
+  
+  if (colorStyle=="RedGreen"){
+    keyvals.colour <- ifelse(
+      deanalysis$FDR > userFDR, 'black',
+      ifelse(deanalysis$logFC < 0, 'green4',
+             ifelse(deanalysis$logFC > 0, 'red',
+                    'black')))
+    keyvals.colour[is.na(keyvals.colour)] <- 'black'
+    names(keyvals.colour)[keyvals.colour == 'red'] <- 'up'
+    names(keyvals.colour)[keyvals.colour == 'black'] <- 'ns'
+    names(keyvals.colour)[keyvals.colour == 'green4'] <- 'down'
+  }
 
   # Using red color for both up and downregulation
   if (colorStyle=="Red"){
@@ -265,6 +277,8 @@ sigDown <- apply(sigDown,2,as.character)
 write.csv(cpmsc,file=paste("Background_Trimmed_","DEAnalysis_",comparisonGroup,"_",inputContrast,".csv",sep=""))
 write.csv(sigUp,file=paste("SigUp_","DEAnalysis_",comparisonGroup,"_",inputContrast,".csv",sep=""))
 write.csv(sigDown,file=paste("SigDown_","DEAnalysis_",comparisonGroup,"_",inputContrast,".csv",sep=""))
+
+#ggsave
 
 # ###################
 # # Prune the master count data list based on what is significant here
