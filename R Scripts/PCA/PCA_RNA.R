@@ -24,7 +24,7 @@ samplesToGraph = "Metadata"
 # What metadata to use to define COLOR?
 metadataColor <- "adultfetal"
 metadataColorFactors <- c("Adult","Fetal")
-colors <- c("green4","red")
+colors <- c("blue","red")
 
 # What metadata to use to define SHAPE?
 if (inputToGraph == "Both" || inputToGraph == "Cells"){ metadataShape <- "group" }

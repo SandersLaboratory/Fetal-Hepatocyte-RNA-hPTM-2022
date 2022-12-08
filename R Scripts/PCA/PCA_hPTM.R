@@ -17,7 +17,7 @@ samplesToGraph = "Metadata"
 
 metadataColor <- "adultfetal"
 metadataColorFactors <- c("Adult","Fetal")
-colors <- c("green4","red")
+colors <- c("blue","red")
 
 metadataShape <- "Group"
 metadataShapeFactors <- c("A-20","F-20","FEHS","FEHD","ADH","FEHL")
