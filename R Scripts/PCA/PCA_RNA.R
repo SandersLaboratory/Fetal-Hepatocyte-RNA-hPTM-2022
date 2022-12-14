@@ -30,6 +30,9 @@ colors <- c("blue","red")
 if (inputToGraph == "Both" || inputToGraph == "Cells"){ metadataShape <- "group" }
 if (inputToGraph == "LCM"){ metadataShape <- "adultfetal" }
 
+# Include LCM sample 246?
+include246 = FALSE
+
 # How to define SHAPE?
 if (inputToGraph == "Both"){
   metadataShapeFactors <- c("Adult","Dual","LAP","Single","Host","Colony")
@@ -106,7 +109,8 @@ countdata_cells <- dplyr::select(countdata_cells, -Gene.name) #Remove gene name 
 countdata_cells <- countdata_cells[rowSums(countdata_cells[])>0,] #Remove all rows that are only 0
 
 countdata_lcm <- read.csv("AF_LCM_all_counts_no246.csv",row.names=1)
-#countdata_lcm <- read.csv("AF_LCM_all_counts.csv",row.names=1)
+
+if (include246) { countdata_lcm <- read.csv("AF_LCM_all_counts.csv",row.names=1) }
 
 # # Merge cell and LCM tables
 # if (inputToGraph=="Both"){
@@ -132,7 +136,7 @@ if (inputToGraph=="Cells"){
 if (inputToGraph=="LCM"){
   countdata <- countdata_lcm
   groups <- read.csv("AF_LCM_metadata_no246.csv",row.names=1)
-  #groups <- read.csv("AF_LCM_metadata.csv",row.names=1)
+  if (include246) { groups <- read.csv("AF_LCM_metadata.csv",row.names=1) }
 }
 
 if (comBatSeq){
@@ -145,6 +149,10 @@ if (comBatSeq){
 
 ########################
 # Normalize and remove low-count reads
+
+# Remove 'X' and replicate # from sample names in data and metadata
+colnames(countdata) <- str_sub(colnames(countdata),2,6)
+row.names(groups) <- str_sub(row.names(groups),2,6)
 
 #Saves normalized CPM file and a count table both with low count reads removed
 
@@ -203,7 +211,7 @@ groups$replicate <- factor(groups$replicate)
 pca <- prcomp(t(pcadata), scale.=TRUE)
 
 # Create merged metadata/data file for use with 3D Plots
-if (typeOfPCA == "3D") {
+#if (typeOfPCA == "3D") {  ### Need to run all this to get info for line 340
   
   #shapes <- c(16,15,18,19,17,17) # Identify shape; NOTE: see http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r
   
@@ -218,7 +226,7 @@ if (typeOfPCA == "3D") {
   merged3D$color <- colorValues[match(merged3D[[metadataColor]], colorIndex)]
   
   #merged3D$unique <- c(1,2,3,1,2,3,1,2,3,4,5,6,4,5,6,4,5,6) #See line 179 - trying to identify group
-}
+#}
 
 }
 
