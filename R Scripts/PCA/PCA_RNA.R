@@ -106,6 +106,7 @@ countdata_cells <- dplyr::select(countdata_cells, -Gene.name) #Remove gene name 
 countdata_cells <- countdata_cells[rowSums(countdata_cells[])>0,] #Remove all rows that are only 0
 
 countdata_lcm <- read.csv("AF_LCM_all_counts_no246.csv",row.names=1)
+#countdata_lcm <- read.csv("AF_LCM_all_counts.csv",row.names=1)
 
 # # Merge cell and LCM tables
 # if (inputToGraph=="Both"){
@@ -131,6 +132,7 @@ if (inputToGraph=="Cells"){
 if (inputToGraph=="LCM"){
   countdata <- countdata_lcm
   groups <- read.csv("AF_LCM_metadata_no246.csv",row.names=1)
+  #groups <- read.csv("AF_LCM_metadata.csv",row.names=1)
 }
 
 if (comBatSeq){
@@ -338,20 +340,20 @@ if (samplesToGraph=="Metadata"){
 #Print out the selected plot
 plot
 
-
-################################
-# John's Code: top % genes
-
-#pca <- prcomp(t(cpmdata), scale.=TRUE) # What is cpmdata?
-pca <- prcomp(t(pcadata), scale.=TRUE)
-gr <- factor(row.names(groups))
-contribution=pca$rotation
-
-##these add up to the total variation attributed to PC2 (or whatever PC you pick)
-PCcontribute=contribution[,"PC2"]
-
-##These are the percent of the total PC2 variation that each gene contributes.
-percents=(PCcontribute*PCcontribute)
-
-##Top of the list is the highest contributor to PC2 variation
-percents=percents[order(percents,decreasing=T)]
+# 
+# ################################
+# # John's Code: top % genes
+# 
+# #pca <- prcomp(t(cpmdata), scale.=TRUE) # What is cpmdata?
+# pca <- prcomp(t(pcadata), scale.=TRUE)
+# gr <- factor(row.names(groups))
+# contribution=pca$rotation
+# 
+# ##these add up to the total variation attributed to PC2 (or whatever PC you pick)
+# PCcontribute=contribution[,"PC2"]
+# 
+# ##These are the percent of the total PC2 variation that each gene contributes.
+# percents=(PCcontribute*PCcontribute)
+# 
+# ##Top of the list is the highest contributor to PC2 variation
+# percents=percents[order(percents,decreasing=T)]
