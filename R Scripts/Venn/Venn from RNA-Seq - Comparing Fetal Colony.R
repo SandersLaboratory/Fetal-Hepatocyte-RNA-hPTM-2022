@@ -121,3 +121,7 @@ write.csv(singleandcolony, paste(direction,category,"Genes_In_Single&Colony.csv"
 #s2=colony
 #grid.newpage()
 #draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("blue","red"),cex=1.5,cat.cex = 1,category = c(set1,set2))
+
+# Make consensus DEG table?
+# Select only rows whose SYMBOL or ENSEMBL match the list
+# Merge tables, keeping only some of the data (logFC, FDR?) and renaming these columns by group (Colony, Dual, Single)
