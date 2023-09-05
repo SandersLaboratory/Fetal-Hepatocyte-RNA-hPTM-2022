@@ -81,7 +81,7 @@ length(dual)
 length(single)
 length(colony)
 
-# Venn!
+# 3-Way Venn
 set1="dual"
 set2="single"
 set3="colony"
@@ -100,6 +100,7 @@ write.csv(all3genes, paste(direction,"Genes_In_Dual&Single&Colony.csv",sep="_"))
 write.csv(dualandcolonygenes, paste(direction,"Genes_In_Dual&Colony.csv",sep="_"))
 write.csv(singleandcolony, paste(direction,"Genes_In_Single&Colony.csv",sep="_"))
 
+# 2-Way Venn
 #dualcolonyonly <- dualandcolonygenes [! dualandcolonygenes %in% singleandcolony]
 #write.csv(dualcolonyonly, "Genes_Only_In_Dual&Colony_NotSingle.csv")
 
