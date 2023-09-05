@@ -8,6 +8,9 @@ library(org.Rn.eg.db)
 library(annotate)
 
 ########################
+# Find genes that are + (POS) in fetal, - (NEG) in fetal, or BOTH?
+direction <- "BOTH"
+
 # Automatically set working directory
 currentwd <- dirname(rstudioapi::getSourceEditorContext()$path)
 githubwd <- str_replace(currentwd, "R Scripts/Venn", "")
@@ -63,6 +66,16 @@ dual <- dualIn[!(dualIn$FDR > 0.05),]
 single <- singleIn[!(singleIn$FDR > 0.05),]
 colony <- colonyIn[!(colonyIn$FDR > 0.05),]
 
+if (direction == "POS"){
+  dual <- dual[(dual$logFC > 0),]
+  single <- single[(single$logFC > 0),]
+  colony <- colony[(colony$logFC > 0),]  
+} else if (direction == "NEG"){
+  dual <- dual[(dual$logFC < 0),]
+  single <- single[(single$logFC < 0),]
+  colony <- colony[(colony$logFC < 0),] 
+}
+
 # Count and Purge NA names
 sum(is.na(dual$SYMBOL))
 sum(is.na(single$SYMBOL))
@@ -100,16 +113,16 @@ dualandcolonygenes <- intersect(s1,s3)
 singleandcolony <- intersect(s2,s3)
 
 setwd(vennwd)
-write.csv(all3genes, "Genes_In_Dual&Single&Colony.csv")
-write.csv(dualandcolonygenes, "Genes_In_Dual&Colony.csv")
-write.csv(singleandcolony, "Genes_In_Single&Colony.csv")
+write.csv(all3genes, paste(direction,"Genes_In_Dual&Single&Colony.csv",sep="_"))
+write.csv(dualandcolonygenes, paste(direction,"Genes_In_Dual&Colony.csv",sep="_"))
+write.csv(singleandcolony, paste(direction,"Genes_In_Single&Colony.csv",sep="_"))
 
-dualcolonyonly <- dualandcolonygenes [! dualandcolonygenes %in% singleandcolony]
-write.csv(dualcolonyonly, "Genes_Only_In_Dual&Colony_NotSingle.csv")
+#dualcolonyonly <- dualandcolonygenes [! dualandcolonygenes %in% singleandcolony]
+#write.csv(dualcolonyonly, "Genes_Only_In_Dual&Colony_NotSingle.csv")
 
-set1="dual"
-set2="colony"
-s1=dual
-s2=colony
-grid.newpage()
-draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("blue","red"),cex=1.5,cat.cex = 1,category = c(set1,set2))
+#set1="dual"
+#set2="colony"
+#s1=dual
+#s2=colony
+#grid.newpage()
+#draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("blue","red"),cex=1.5,cat.cex = 1,category = c(set1,set2))
