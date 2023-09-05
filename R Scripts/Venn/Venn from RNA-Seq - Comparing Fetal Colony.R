@@ -22,44 +22,27 @@ setwd(rnawd)
 colonyIn <- read.csv("DEAnalysis_adultfetal_Fetal-Adult.csv", row.names="ENSEMBL")
 dualIn <- read.csv("DEAnalysis_group_Dual-Adult.csv", row.names="ENSEMBL")
 singleIn <- read.csv("DEAnalysis_group_Single-Adult.csv", row.names="ENSEMBL")
+sets <- list("colonyIn","dualIn","singleIn") # List of the imported sets
 
-
-# Annotate with Gene Symbol
-colonyIn$ENSEMBL <- row.names(colonyIn)
-colonyIn$SYMBOL <- mapIds(org.Rn.eg.db,
-                            keys=colonyIn$ENSEMBL,
+for (i in sets){
+  #print(i)
+  j <- get(i)
+  
+  # Annotate with Gene Symbol
+  j$ENSEMBL <- row.names(j)
+  j$SYMBOL <- mapIds(org.Rn.eg.db,
+                            keys=j$ENSEMBL,
                             column="SYMBOL",
                             keytype="ENSEMBL",
                             multiVals="first")
-colonyIn$UNIPROT <- mapIds(org.Rn.eg.db,
-                          keys=colonyIn$ENSEMBL,
-                          column="UNIPROT",
-                          keytype="ENSEMBL",
-                          multiVals="first")
-
-dualIn$ENSEMBL <- row.names(dualIn)
-dualIn$SYMBOL <- mapIds(org.Rn.eg.db,
-                          keys=dualIn$ENSEMBL,
-                          column="SYMBOL",
-                          keytype="ENSEMBL",
-                          multiVals="first")
-dualIn$UNIPROT <- mapIds(org.Rn.eg.db,
-                           keys=dualIn$ENSEMBL,
-                           column="UNIPROT",
-                           keytype="ENSEMBL",
-                           multiVals="first")
-
-singleIn$ENSEMBL <- row.names(singleIn)
-singleIn$SYMBOL <- mapIds(org.Rn.eg.db,
-                        keys=singleIn$ENSEMBL,
-                        column="SYMBOL",
-                        keytype="ENSEMBL",
-                        multiVals="first")
-singleIn$UNIPROT <- mapIds(org.Rn.eg.db,
-                         keys=singleIn$ENSEMBL,
-                         column="UNIPROT",
-                         keytype="ENSEMBL",
-                         multiVals="first")
+  j$UNIPROT <- mapIds(org.Rn.eg.db,
+                             keys=j$ENSEMBL,
+                             column="UNIPROT",
+                             keytype="ENSEMBL",
+                             multiVals="first")
+  #Re-set the original variable
+  assign(i,j)
+}
 
 # Reduce all to only Signif q<0.05
 dual <- dualIn[!(dualIn$FDR > 0.05),]
