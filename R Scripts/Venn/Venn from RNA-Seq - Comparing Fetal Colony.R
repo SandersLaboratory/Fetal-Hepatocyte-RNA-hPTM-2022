@@ -10,6 +10,8 @@ library(annotate)
 ########################
 # Find genes that are + (POS) in fetal, - (NEG) in fetal, or BOTH?
 direction <- "BOTH"
+# Use SYMBOL or ENSEMBL to compare
+category <- "SYMBOL"
 
 # Automatically set working directory
 currentwd <- dirname(rstudioapi::getSourceEditorContext()$path)
@@ -59,22 +61,31 @@ if (direction == "POS"){
   colony <- colony[(colony$logFC < 0),] 
 }
 
-# Count and Purge NA names
-sum(is.na(dual$SYMBOL))
-sum(is.na(single$SYMBOL))
-sum(is.na(colony$SYMBOL))
-#sum(colony$genesymbol==" ")
+if (category == "SYMBOL"){
+  # Count and Purge NA names
+  sum(is.na(dual$SYMBOL))
+  sum(is.na(single$SYMBOL))
+  sum(is.na(colony$SYMBOL))
+  #sum(colony$genesymbol==" ")
+  
+  dual <- dual[!is.na(dual$SYMBOL),]
+  single <- single[!is.na(single$SYMBOL),]
+  colony <- colony[!is.na(colony$SYMBOL),]
+  #colony <- colony[!colony$genesymbol==" ",]
+  
+  # Export only gene names from each list
+  dual <- dual$SYMBOL
+  single <- single$SYMBOL
+  colony <- colony$SYMBOL
+  #colony <- colony$genesymbol
+}
 
-dual <- dual[!is.na(dual$SYMBOL),]
-single <- single[!is.na(single$SYMBOL),]
-colony <- colony[!is.na(colony$SYMBOL),]
-#colony <- colony[!colony$genesymbol==" ",]
-
-# Export only gene names from each list
-dual <- dual$SYMBOL
-single <- single$SYMBOL
-colony <- colony$SYMBOL
-#colony <- colony$genesymbol
+if (category == "ENSEMBL"){
+  # Export only ENSEMBL IDs from each list
+  dual <- dual$ENSEMBL
+  single <- single$ENSEMBL
+  colony <- colony$ENSEMBL
+}
 
 # sums
 length(dual)
@@ -96,9 +107,9 @@ dualandcolonygenes <- intersect(s1,s3)
 singleandcolony <- intersect(s2,s3)
 
 setwd(vennwd)
-write.csv(all3genes, paste(direction,"Genes_In_Dual&Single&Colony.csv",sep="_"))
-write.csv(dualandcolonygenes, paste(direction,"Genes_In_Dual&Colony.csv",sep="_"))
-write.csv(singleandcolony, paste(direction,"Genes_In_Single&Colony.csv",sep="_"))
+write.csv(all3genes, paste(direction,category,"Genes_In_Dual&Single&Colony.csv",sep="_"))
+write.csv(dualandcolonygenes, paste(direction,category,"Genes_In_Dual&Colony.csv",sep="_"))
+write.csv(singleandcolony, paste(direction,category,"Genes_In_Single&Colony.csv",sep="_"))
 
 # 2-Way Venn
 #dualcolonyonly <- dualandcolonygenes [! dualandcolonygenes %in% singleandcolony]
