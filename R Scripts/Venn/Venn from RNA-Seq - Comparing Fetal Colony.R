@@ -103,13 +103,18 @@ grid.newpage()
 draw.triple.venn(area1=length(s1),area2=length(s2),area3=length(s3),n12=length(intersect(s1,s2)),n23 = length(intersect(s2,s3)),n13 = length(intersect(s1,s3)),n123 = length(intersect(intersect(s1,s2),s3)),category=c(set1,set2,set3),fill = c("green", "blue","red"),cex=1.5,cat.cex = 1)
 
 all3genes <- intersect(intersect(s1,s2),s3)
-dualandcolonygenes <- intersect(s1,s3)
+dualandcolony <- intersect(s1,s3)
 singleandcolony <- intersect(s2,s3)
+
+dualandcolonyonly <- setdiff(dualandcolony, singleandcolony)
+singleandcolonyonly <- setdiff(singleandcolony, dualandcolony)
 
 setwd(vennwd)
 write.csv(all3genes, paste(direction,category,"Genes_In_Dual&Single&Colony.csv",sep="_"))
-write.csv(dualandcolonygenes, paste(direction,category,"Genes_In_Dual&Colony.csv",sep="_"))
+write.csv(dualandcolony, paste(direction,category,"Genes_In_Dual&Colony.csv",sep="_"))
 write.csv(singleandcolony, paste(direction,category,"Genes_In_Single&Colony.csv",sep="_"))
+write.csv(dualandcolonyonly, paste(direction,category,"Genes_In_Dual&Colony_ONLY.csv",sep="_"))
+write.csv(singleandcolonyonly, paste(direction,category,"Genes_In_Single&Colony_ONLY.csv",sep="_"))
 
 # 2-Way Venn
 #dualcolonyonly <- dualandcolonygenes [! dualandcolonygenes %in% singleandcolony]
