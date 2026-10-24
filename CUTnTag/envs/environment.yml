@@ -1,0 +1,28 @@
+# conda env for the CUT&Tag reanalysis
+name: cutntag
+channels:
+  # NOTE (policy): no `defaults` channel here — has no Anaconda
+  # commercial license and blocks repo.anaconda.com. Everything below is
+  # on conda-forge / bioconda, reached via the proxy
+  # (channel_alias in ~/.condarc). `nodefaults` makes the exclusion explicit.
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - r-base=4.3
+  - fastqc
+  - multiqc
+  - fastp
+  - bowtie2
+  - samtools>=1.17
+  - picard
+  - bedtools
+  - deeptools
+  - subread            # featureCounts (not used directly; counting done in R via Rsubread)
+  - homer
+  - r-tidyverse
+  - r-pheatmap
+  # NOTE: Bioconductor R packages (DESeq2, ChIPseeker, ...) are NOT installed
+  # via conda here — conda-forge mirror does not carry them.
+  # 00_setup.sh installs them with BiocManager instead (no Anaconda involved).
